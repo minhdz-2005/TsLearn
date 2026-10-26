@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "practice:ts": "node --no-warnings=ExperimentalWarning --loader ts-node/esm/transpile-only",
+    "practice:ts:check": "tsc -p practice-ts --noEmit"
+  },
   "devDependencies": {
     "@types/node": "^26.6.5",
     "ts-node": "^10.9.2",

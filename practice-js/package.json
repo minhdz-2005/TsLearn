@@ -1,0 +1,4 @@
+{
+  "type": "module",
+  "description": "Khai báo để Node chạy file .js ở đây theo ES Module (không cảnh báo khi re-parse)"
+}
