@@ -35,10 +35,15 @@ asyncDemo();
 
 console.log("1b) script end (đồng bộ)");
 
-// Thứ tự đúng trên Node.js:
-//   1, 1b, 2a, 3, 2b, 4, 5c, 5a, 5b, 6
-// Giải thích: phần đồng bộ của async chạy tới await; microtask queue được
-// rút cạn (kể cả microtask mới sinh ra) rồi mới tới macrotask setTimeout.
+// Thứ tự thực tế trên Node 22 (các nhãn đánh số):
+//   1, 2a, 1b, 4, 3, 2b, 5a, 5c, 5b, 6
+// Giải thích:
+//   - Toàn bộ code đồng bộ chạy trước, gồm cả 2a (async chạy đồng bộ tới await) và 1b.
+//   - Microtask chạy theo thứ tự enqueue: queueMicrotask (#4) được đăng TRƯỚC
+//     Promise.resolve().then (#3), nên #4 in trước #3.
+//   - Lệnh resume của async function sau `await` là một microtask (#2b).
+//   - Microtask sinh thêm microtask (5b) vẫn chạy trước macrotask setTimeout (#6).
+//   - Kết luận: đừng tin rằng "Promise luôn trước queueMicrotask" — cùng hàng đợi, FIFO.
 
 console.log("--- đo thời gian ---");
 const t0 = performance.now();
